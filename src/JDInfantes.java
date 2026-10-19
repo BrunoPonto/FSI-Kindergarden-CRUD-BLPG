@@ -1,4 +1,5 @@
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.swing.JOptionPane;
@@ -12,19 +13,32 @@ import javax.swing.JOptionPane;
  * @author bruno
  */
 public class JDInfantes extends javax.swing.JDialog {
-    
+
     private Conexion cnx;
 
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(JDInfantes.class.getName());
-    
+
     public JDInfantes(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
         setLocationRelativeTo(this);
     }
-    
-    public void obtenerConexion(Conexion cnx){
+
+    public void obtenerConexion(Conexion cnx) {
         this.cnx = cnx;
+    }
+
+    public void obtenerInfante(infante kid) {
+        try {
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+            txtCurp.setText(kid.curp);
+            txtNombre.setText(kid.nombre);
+            cbxSexo.setSelectedItem(kid.sexo);
+            sFecha.setValue(format.parse(kid.fecha));
+            cbxEstado.setSelectedItem(kid.estado);
+        } catch (ParseException ex) {
+            System.getLogger(JDInfantes.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+        }
     }
 
     /**
@@ -74,10 +88,13 @@ public class JDInfantes extends javax.swing.JDialog {
         BRegistro.addActionListener(this::BRegistroActionPerformed);
 
         BActualizar.setText("Actualizar");
+        BActualizar.addActionListener(this::BActualizarActionPerformed);
 
         BEliminar.setText("Eliminar");
+        BEliminar.addActionListener(this::BEliminarActionPerformed);
 
         BCancelar.setText("Cancelar");
+        BCancelar.addActionListener(this::BCancelarActionPerformed);
 
         jLabel6.setFont(new java.awt.Font("Segoe UI", 1, 23)); // NOI18N
         jLabel6.setText("Registro del infante al Kindergarden");
@@ -161,7 +178,7 @@ public class JDInfantes extends javax.swing.JDialog {
                 txtCurp.getText(),
                 txtNombre.getText(),
                 cbxSexo.getSelectedItem().toString(),
-                s.format((Date)sFecha.getValue()),
+                s.format((Date) sFecha.getValue()),
                 cbxEstado.getSelectedItem().toString()
         );
 
@@ -172,6 +189,46 @@ public class JDInfantes extends javax.swing.JDialog {
             JOptionPane.showMessageDialog(this, "Error de registro");
         }
     }//GEN-LAST:event_BRegistroActionPerformed
+
+    private void BActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BActualizarActionPerformed
+        SimpleDateFormat s = new SimpleDateFormat("yyyy-MM-dd");
+        infante kid = new infante(
+                txtCurp.getText(),
+                txtNombre.getText(),
+                cbxSexo.getSelectedItem().toString(),
+                s.format((Date) sFecha.getValue()),
+                cbxEstado.getSelectedItem().toString()
+        );
+
+        if (kid.actualizar(cnx.con) == 1) {
+            JOptionPane.showMessageDialog(this, "Datos del infante actualizado");
+            this.dispose();
+        } else {
+            JOptionPane.showMessageDialog(this, "Error de registro");
+        }
+    }//GEN-LAST:event_BActualizarActionPerformed
+
+    private void BEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BEliminarActionPerformed
+        SimpleDateFormat s = new SimpleDateFormat("yyyy-MM-dd");
+        infante kid = new infante(
+                txtCurp.getText(),
+                txtNombre.getText(),
+                cbxSexo.getSelectedItem().toString(),
+                s.format((Date) sFecha.getValue()),
+                cbxEstado.getSelectedItem().toString()
+        );
+
+        if (kid.borrar(cnx.con) == 1) {
+            JOptionPane.showMessageDialog(this, "Datos del infante actualizado");
+            this.dispose();
+        } else {
+            JOptionPane.showMessageDialog(this, "Error de registro");
+        }
+    }//GEN-LAST:event_BEliminarActionPerformed
+
+    private void BCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BCancelarActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_BCancelarActionPerformed
 
     /**
      * @param args the command line arguments

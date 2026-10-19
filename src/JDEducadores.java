@@ -28,6 +28,15 @@ public class JDEducadores extends javax.swing.JDialog {
         this.cnx = cnx;
     }
 
+    public void obtenerEducador(educador edu) {
+        txtCurp.setText(edu.curp);
+        txtNombre.setText(edu.nombre);
+        cbxSexo.setSelectedItem(edu.sexo);
+        txtTelefono.setText(edu.telefono);
+        txtDireccion.setText(edu.direccion);
+        cbxEstado.setSelectedItem(edu.estado);
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -58,16 +67,19 @@ public class JDEducadores extends javax.swing.JDialog {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         BCancelar.setText("Cancelar");
+        BCancelar.addActionListener(this::BCancelarActionPerformed);
 
         jLabel3.setText("Sexo:");
 
         bActualizar.setText("Actualizar");
+        bActualizar.addActionListener(this::bActualizarActionPerformed);
 
         cbxSexo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Maculino", "Femenino" }));
 
         jLabel4.setText("Direccion:");
 
         BEliminar.setText("Eliminar");
+        BEliminar.addActionListener(this::BEliminarActionPerformed);
 
         jLabel1.setText("Curp:");
 
@@ -179,6 +191,44 @@ public class JDEducadores extends javax.swing.JDialog {
             JOptionPane.showMessageDialog(this, "Error de registro");
         }
     }//GEN-LAST:event_BRegitrarActionPerformed
+
+    private void bActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bActualizarActionPerformed
+        educador edu = new educador(
+                txtCurp.getText(),
+                txtNombre.getText(),
+                cbxSexo.getSelectedItem().toString(),
+                txtTelefono.getText(),
+                txtDireccion.getText(),
+                cbxEstado.getSelectedItem().toString()
+        );
+        if (edu.actualizar(cnx.con) == 1) {
+            JOptionPane.showMessageDialog(this, "Datos del educador actualizado");
+            this.dispose();
+        } else {
+            JOptionPane.showMessageDialog(this, "Error de registro");
+        }
+    }//GEN-LAST:event_bActualizarActionPerformed
+
+    private void BEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BEliminarActionPerformed
+        educador edu = new educador(
+                txtCurp.getText(),
+                txtNombre.getText(),
+                cbxSexo.getSelectedItem().toString(),
+                txtTelefono.getText(),
+                txtDireccion.getText(),
+                cbxEstado.getSelectedItem().toString()
+        );
+        if (edu.borrar(cnx.con) == 1) {
+            JOptionPane.showMessageDialog(this, "Datos del educador actualizado");
+            this.dispose();
+        } else {
+            JOptionPane.showMessageDialog(this, "Error de registro");
+        }
+    }//GEN-LAST:event_BEliminarActionPerformed
+
+    private void BCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BCancelarActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_BCancelarActionPerformed
 
     /**
      * @param args the command line arguments

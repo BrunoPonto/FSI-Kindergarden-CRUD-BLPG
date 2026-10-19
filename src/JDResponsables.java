@@ -1,19 +1,20 @@
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import javax.swing.JOptionPane;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
  */
-
 /**
  *
  * @author bruno
  */
 public class JDResponsables extends javax.swing.JDialog {
-    
+
     private Conexion cnx;
-    
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(JDResponsables.class.getName());
 
     /**
@@ -24,9 +25,18 @@ public class JDResponsables extends javax.swing.JDialog {
         initComponents();
         setLocationRelativeTo(this);
     }
-    
-    public void obtenerConexion(Conexion cnx){
+
+    public void obtenerConexion(Conexion cnx) {
         this.cnx = cnx;
+    }
+
+    public void obtenerResponsable(responsable res) {
+        txtCurp.setText(res.curp);
+        txtNombre.setText(res.nombre);
+        cbxSexo.setSelectedItem(res.sexo);
+        txtTelefono.setText(res.telefono);
+        txtParentesco.setText(res.parentesco);
+        cbxEstado.setSelectedItem(res.estado);
     }
 
     /**
@@ -61,10 +71,12 @@ public class JDResponsables extends javax.swing.JDialog {
         jLabel3.setText("Sexo:");
 
         bActualizar.setText("Actualizar");
+        bActualizar.addActionListener(this::bActualizarActionPerformed);
 
         jLabel4.setText("Parentesco:");
 
         BEliminar.setText("Eliminar");
+        BEliminar.addActionListener(this::BEliminarActionPerformed);
 
         jLabel5.setText("Telefono:");
 
@@ -73,6 +85,7 @@ public class JDResponsables extends javax.swing.JDialog {
         cbxEstado.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Activo", "Inactivo" }));
 
         BCancelar.setText("Cancelar");
+        BCancelar.addActionListener(this::BCancelarActionPerformed);
 
         cbxSexo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Maculino", "Femenino" }));
 
@@ -181,6 +194,46 @@ public class JDResponsables extends javax.swing.JDialog {
             JOptionPane.showMessageDialog(this, "Error de registro");
         }
     }//GEN-LAST:event_BRegitrarActionPerformed
+
+    private void bActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bActualizarActionPerformed
+        responsable res = new responsable(
+                txtCurp.getText(),
+                txtNombre.getText(),
+                cbxSexo.getSelectedItem().toString(),
+                txtTelefono.getText(),
+                txtParentesco.getText(),
+                cbxEstado.getSelectedItem().toString()
+        );
+
+        if (res.actualizar(cnx.con) == 1) {
+            JOptionPane.showMessageDialog(this, "Datos del responsable actualizado");
+            this.dispose();
+        } else {
+            JOptionPane.showMessageDialog(this, "Error de registro");
+        }
+    }//GEN-LAST:event_bActualizarActionPerformed
+
+    private void BEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BEliminarActionPerformed
+        responsable res = new responsable(
+                txtCurp.getText(),
+                txtNombre.getText(),
+                cbxSexo.getSelectedItem().toString(),
+                txtTelefono.getText(),
+                txtParentesco.getText(),
+                cbxEstado.getSelectedItem().toString()
+        );
+
+        if (res.borrar(cnx.con) == 1) {
+            JOptionPane.showMessageDialog(this, "Datos del responsable actualizado");
+            this.dispose();
+        } else {
+            JOptionPane.showMessageDialog(this, "Error de registro");
+        }
+    }//GEN-LAST:event_BEliminarActionPerformed
+
+    private void BCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BCancelarActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_BCancelarActionPerformed
 
     /**
      * @param args the command line arguments

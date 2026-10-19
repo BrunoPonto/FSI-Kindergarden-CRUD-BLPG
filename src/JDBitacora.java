@@ -28,10 +28,21 @@ public class JDBitacora extends javax.swing.JDialog {
 
     public void obtenerConexion(Conexion cnx) {
         this.cnx = cnx;
-        
+
         cnx.seleccionar(infante.curps, cbxInfante);
         cnx.seleccionar(responsable.curps, cbxResponsable);
         cnx.seleccionar(educador.curps, cbxEducador);
+    }
+
+    public void obtenerBitacora(bitacora bi) {
+        LFolio.setText(bi.folio);
+        LFecha.setText(bi.tiempo);
+        cbxTipo.setSelectedItem(bi.tipo);
+        txaObservacion.setText(bi.observaciones);
+        txtBitacora.setText(bi.bitacora);
+        cbxInfante.setSelectedItem(bi.infantes);
+        cbxResponsable.setSelectedItem(bi.responsable);
+        cbxEducador.setSelectedItem(bi.educador);
     }
 
     /**
@@ -70,6 +81,7 @@ public class JDBitacora extends javax.swing.JDialog {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         BCancelar.setText("Cancelar");
+        BCancelar.addActionListener(this::BCancelarActionPerformed);
 
         cbxTipo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Entrada", "Salida" }));
 
@@ -83,10 +95,12 @@ public class JDBitacora extends javax.swing.JDialog {
         jLabel3.setText("Tipo:");
 
         BActualizar.setText("Actualizar");
+        BActualizar.addActionListener(this::BActualizarActionPerformed);
 
         jLabel4.setText("Infante:");
 
         BEliminar.setText("Eliminar");
+        BEliminar.addActionListener(this::BEliminarActionPerformed);
 
         jLabel5.setText("Observaciones:");
 
@@ -118,10 +132,6 @@ public class JDBitacora extends javax.swing.JDialog {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel9)
-                        .addGap(45, 45, 45)
-                        .addComponent(txtBitacora))
-                    .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel6)
                         .addGap(18, 18, 18)
                         .addComponent(cbxResponsable, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -129,13 +139,26 @@ public class JDBitacora extends javax.swing.JDialog {
                         .addComponent(jLabel7)
                         .addGap(38, 38, 38)
                         .addComponent(cbxEducador, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(jLabel8, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(BRegitrar)
+                                .addGap(41, 41, 41)
+                                .addComponent(BActualizar)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(BEliminar)
+                                .addGap(34, 34, 34)
+                                .addComponent(BCancelar))))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel5)
                             .addComponent(jLabel4)
                             .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel2)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel9))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(cbxTipo, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -145,17 +168,8 @@ public class JDBitacora extends javax.swing.JDialog {
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(LFecha, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(BHoy, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addComponent(jLabel8, javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(layout.createSequentialGroup()
-                            .addComponent(BRegitrar)
-                            .addGap(41, 41, 41)
-                            .addComponent(BActualizar)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(BEliminar)
-                            .addGap(34, 34, 34)
-                            .addComponent(BCancelar))))
+                                .addComponent(BHoy, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(txtBitacora, javax.swing.GroupLayout.Alignment.TRAILING))))
                 .addGap(11, 11, 11))
         );
         layout.setVerticalGroup(
@@ -183,15 +197,11 @@ public class JDBitacora extends javax.swing.JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel5)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel9)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
-                    .addGroup(layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(txtBitacora, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 19, Short.MAX_VALUE)))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtBitacora, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel9))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 13, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
                     .addComponent(cbxInfante, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -217,7 +227,7 @@ public class JDBitacora extends javax.swing.JDialog {
 
     private void BRegitrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BRegitrarActionPerformed
 
-        bitacora bic = new bitacora(
+        bitacora bit = new bitacora(
                 null,
                 LFecha.getText(),
                 cbxTipo.getSelectedItem().toString(),
@@ -228,7 +238,7 @@ public class JDBitacora extends javax.swing.JDialog {
                 cbxEducador.getSelectedItem().toString()
         );
 
-        if (bic.insetar(cnx.con) == 1) {
+        if (bit.insetar(cnx.con) == 1) {
             JOptionPane.showMessageDialog(this, "Registro añadido");
             this.dispose();
         } else {
@@ -240,6 +250,50 @@ public class JDBitacora extends javax.swing.JDialog {
         SimpleDateFormat s = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         LFecha.setText(s.format(new Date()));
     }//GEN-LAST:event_BHoyActionPerformed
+
+    private void BActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BActualizarActionPerformed
+        bitacora bit = new bitacora(
+                null,
+                LFecha.getText(),
+                cbxTipo.getSelectedItem().toString(),
+                txaObservacion.getText(),
+                txtBitacora.getText(),
+                cbxInfante.getSelectedItem().toString(),
+                cbxResponsable.getSelectedItem().toString(),
+                cbxEducador.getSelectedItem().toString()
+        );
+
+        if (bit.actualizar(cnx.con) == 1) {
+            JOptionPane.showMessageDialog(this, "Datos de la bitacora actualizados");
+            this.dispose();
+        } else {
+            JOptionPane.showMessageDialog(this, "Error de registro");
+        }
+    }//GEN-LAST:event_BActualizarActionPerformed
+
+    private void BEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BEliminarActionPerformed
+        bitacora bit = new bitacora(
+                null,
+                LFecha.getText(),
+                cbxTipo.getSelectedItem().toString(),
+                txaObservacion.getText(),
+                txtBitacora.getText(),
+                cbxInfante.getSelectedItem().toString(),
+                cbxResponsable.getSelectedItem().toString(),
+                cbxEducador.getSelectedItem().toString()
+        );
+
+        if (bit.borrar(cnx.con) == 1) {
+            JOptionPane.showMessageDialog(this, "Datos de la bitacora actualizados");
+            this.dispose();
+        } else {
+            JOptionPane.showMessageDialog(this, "Error de registro");
+        }
+    }//GEN-LAST:event_BEliminarActionPerformed
+
+    private void BCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BCancelarActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_BCancelarActionPerformed
 
     /**
      * @param args the command line arguments
